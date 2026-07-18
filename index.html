@@ -4,11 +4,1032 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Anv Exams</title>
+    <!-- Favicon configuration -->
     <link rel="icon" type="image/x-icon" href="./favicon.png">
     <link rel="apple-touch-icon" href="./favicon.png">
-    <link href="./output.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="./lucide.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts: Plus Jakarta Sans & Noto Sans Devanagari -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+            background-color: #121212; /* Solid Charcoal Black Canvas */
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .hindi-font {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        .apple-tight-title {
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .apple-tight-body {
+            letter-spacing: -0.015em;
+        }
+
+        /* Pure flat cards with solid Apple Charcoal surface shades */
+        .charcoal-card {
+            background-color: #1c1c1e; /* surface-tile-1 */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Micro-scale interactive feedback */
+        .btn-scale {
+            transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease;
+        }
+        .btn-scale:active {
+            transform: scale(0.96);
+        }
+
+        /* Smooth zero-gap accordion transitions */
+        .collapsible-content {
+            transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.25s ease;
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .collapsible-content.collapsed {
+            max-height: 0 !important;
+            opacity: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            pointer-events: none;
+        }
+
+        /* Circular progress ring styling */
+        .progress-circle-ring {
+            transition: stroke-dashoffset 0.35s ease-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* Custom tick SVG scale animation */
+        .tick-pop {
+            animation: popCheck 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popCheck {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Premium custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c2c2e;
+            border-radius: 9999px;
+        }
+        
+        /* Bar chart styling matching image_0b3de8.png */
+        .glow-orange {
+            box-shadow: 0 0 35px rgba(255, 102, 0, 0.15);
+        }
+
+        /* Vertical label alignment classes */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-full pb-20 px-4 apple-tight-body select-none">
+
+    <!-- App Container: Centered elegant column layout -->
+    <div class="w-full max-w-lg mx-auto pt-10 space-y-6">
+
+        <!-- Global Header -->
+        <header class="flex items-center justify-between">
+            <div class="space-y-1">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#2997ff]">
+                    PM SHRI KV JANAKPURI
+                </span>
+                <h1 class="text-2xl font-black text-white apple-tight-title">
+                    Anv. Exams
+                </h1>
+            </div>
+
+            <!-- See Date Sheet Action Pill -->
+            <button onclick="toggleDateSheetModal(true, event)" class="btn-scale px-4 py-2 bg-[#1c1c1e] hover:bg-[#2c2c2e] border border-white/5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 transition">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#2997ff]"></i>
+                <span>See Date Sheet</span>
+            </button>
+        </header>
+
+        <!-- Dynamic Focus / Preparation Card -->
+        <section class="charcoal-card rounded-2xl p-5 flex items-center justify-between gap-4">
+            <div class="space-y-2 flex-1">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#2997ff] animate-pulse"></span>
+                    <h3 id="focus-msg" class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Ready to study</h3>
+                </div>
+                <div class="space-y-1">
+                    <h2 class="text-lg font-black text-white leading-tight">Focus Score</h2>
+                    <p id="total-chapters-sub" class="text-xs text-gray-400">Completed 0 of 0 chapters.</p>
+                </div>
+                
+                <!-- Progress bar fill -->
+                <div class="pt-1.5 space-y-1">
+                    <div class="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+                        <div id="exo-bar-fill" class="h-full bg-[#0066cc] rounded-full transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Circular indicator -->
+            <div class="relative flex items-center justify-center flex-shrink-0">
+                <svg class="w-16 h-16">
+                    <circle class="text-white/5" stroke-width="4" stroke="currentColor" fill="transparent" r="26" cx="32" cy="32"/>
+                    <circle id="global-ring" class="text-[#2997ff] progress-circle-ring" stroke-width="4.5" stroke-linecap="round" stroke="currentColor" fill="transparent" r="26" cx="32" cy="32" style="stroke-dasharray: 163.36; stroke-dashoffset: 163.36;"/>
+                </svg>
+                <div class="absolute flex flex-col items-center">
+                    <span id="global-percent" class="text-sm font-black text-white">0%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Collapsible Syllabus Sections rendered according to dates sheet timeline -->
+        <main id="syllabus-container" class="space-y-4">
+            <!-- Dynamic sections injected here by JS -->
+        </main>
+        
+        <!-- Apple standard discrete version footer -->
+        <footer class="text-center pt-8 pb-4 text-[10px] text-gray-600 font-mono tracking-widest uppercase">
+            AnvCore v4.5 Syllabus Platform
+        </footer>
+
+    </div>
+
+    <!-- DATE SHEET ANALYTIC-STYLE MODAL OVERLAY (Redesigned matching image_0b3de8.png and image_0aaa6a.jpg) -->
+    <div id="datesheet-modal" onclick="handleOutsideModalClick(event, 'datesheet-modal')" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden transition-opacity duration-200 opacity-0">
+        <div class="charcoal-card rounded-2xl w-full max-w-md p-6 shadow-2xl relative flex flex-col max-h-[90vh] glow-orange" onclick="event.stopPropagation()">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between pb-4 border-b border-white/5">
+                <div>
+                    <span class="text-[9px] font-extrabold uppercase tracking-widest text-[#2997ff] bg-blue-500/10 px-2 py-0.5 rounded">
+                        PM SHRI KV JANAKPURI (SHIFT-2)
+                    </span>
+                    <h2 class="text-lg font-black text-white mt-1 apple-tight-title">Class 10 PT-1 Date Sheet</h2>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <!-- Info Toggle Button ("i" button) adjacent to Cross button -->
+                    <button id="modal-info-btn" onclick="toggleTimingsOverlay(event)" class="btn-scale p-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition" title="Show Timings">
+                        <i data-lucide="info" class="w-4 h-4 text-[#2997ff]"></i>
+                    </button>
+                    <button onclick="toggleDateSheetModal(false, event)" class="btn-scale p-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content mimicking image_0b3de8.png analytic card dashboard -->
+            <div class="flex-1 py-5 space-y-6 pr-1 relative">
+                
+                <!-- Premium Analytic Card Layout block inside -->
+                <div class="bg-black/40 border border-white/[0.04] p-5 rounded-2xl relative overflow-hidden space-y-4">
+                    <!-- Subtle Warm Backdrop Accent Spot -->
+                    <div class="absolute -right-16 -top-16 w-36 h-36 rounded-full bg-blue-600/10 blur-2xl pointer-events-none"></div>
+                    
+                    <div class="flex items-start justify-between relative z-10">
+                        <div class="space-y-1">
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Timeline Flow</span>
+                            <div class="flex items-baseline gap-1.5">
+                                <span class="text-2xl font-black text-white" id="modal-title-count">6 Exams</span>
+                                <span class="text-xs text-gray-500 font-medium">PT-1 Period</span>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 bg-[#0066cc] rounded-full text-[10px] font-bold text-white tracking-wide">
+                            • July 2026
+                        </div>
+                    </div>
+
+                    <!-- Column Graph representation of subjects layout with mouse tracking wrapper -->
+                    <div id="graph-container-relative" class="pt-2 relative h-52 select-none" onmouseleave="hideTooltip()">
+                        <!-- Floating detail box mimicking original tooltip of image_0b3de8.png -->
+                        <div id="analytic-tooltip" class="absolute pointer-events-none opacity-0 scale-95 transition-all duration-100 ease-out bg-[#1c1c1e] border border-white/10 p-3 rounded-xl text-[10px] space-y-1 shadow-lg z-20 w-32">
+                            <span class="text-gray-400 font-bold uppercase tracking-wider" id="tooltip-status">Active Exam</span>
+                            <div class="text-white font-black text-xs" id="tooltip-date">July 24, 2026</div>
+                            <div class="flex justify-between text-gray-300 pt-1">
+                                <span>Chapters:</span>
+                                <span class="font-bold text-white" id="tooltip-chapters">4 Total</span>
+                            </div>
+                        </div>
+
+                        <!-- Bar chart columns representing exam loads -->
+                        <div class="h-36 flex items-end justify-between gap-1.5 px-1 pt-6 pb-2">
+                            <!-- Science -->
+                            <div onmouseenter="updateTooltip('science')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
+                                <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
+                                    <!-- Interactive Tick inside bar -->
+                                    <div class="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 w-4 h-4 rounded-full bg-[#2997ff] flex items-center justify-center border border-white shadow-lg">
+                                        <i data-lucide="check" class="w-2.5 h-2.5 text-white stroke-[3]"></i>
+                                    </div>
+                                    <div class="w-full bg-gradient-to-t from-[#0066cc]/40 to-[#2997ff] rounded-t-lg transition-all group-hover:brightness-110 flex items-center justify-center" style="height: 40%;">
+                                        <!-- Vertical Name inside bar -->
+                                        <span class="vertical-text absolute bottom-3 text-[9px] font-black tracking-widest text-[#121212] uppercase select-none">Science</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Hindi -->
+                            <div onmouseenter="updateTooltip('hindi')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
+                                <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 95%;">
+                                        <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">Hindi</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Social Sci -->
+                            <div onmouseenter="updateTooltip('social')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
+                                <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 40%;">
+                                        <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">Social</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- AI -->
+                            <div onmouseenter="updateTooltip('ai')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
+                                <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 40%;">
+                                        <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">AI</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Maths -->
+                            <div onmouseenter="updateTooltip('maths')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
+                                <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 50%;">
+                                        <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">Maths</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- English -->
+                            <div onmouseenter="updateTooltip('english')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
+                                <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 75%;">
+                                        <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">English</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date timeline footer label ticks inside the bar wrapper -->
+                        <div class="flex justify-between text-[8px] text-gray-500 font-extrabold uppercase tracking-wider pt-2 px-1 border-t border-white/[0.02]">
+                            <div class="flex-1 text-center">24.07</div>
+                            <div class="flex-1 text-center">25.07</div>
+                            <div class="flex-1 text-center">27.07</div>
+                            <div class="flex-1 text-center">28.07</div>
+                            <div class="flex-1 text-center">29.07</div>
+                            <div class="flex-1 text-center">30.07</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OVERLAY BOX INSTEAD OF SCROLLABLE COLUMN (Triggered by the info toggle button) -->
+                <div id="timings-overlay-card" class="absolute inset-0 bg-[#1c1c1e] border border-white/10 rounded-2xl p-5 flex flex-col justify-center gap-4 hidden z-40 transition-all duration-300 opacity-0 transform translate-y-4">
+                    <div class="flex items-center justify-between pb-2 border-b border-white/5">
+                        <h3 class="text-xs font-bold text-[#2997ff] uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            <span>Reporting & Exam Slots</span>
+                        </h3>
+                        <button onclick="toggleTimingsOverlay(event)" class="text-gray-400 hover:text-white p-1 hover:bg-white/5 rounded-md">
+                            <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-y-3 text-xs text-gray-300">
+                        <span class="text-gray-400 font-medium">Reporting Time:</span>
+                        <span class="font-bold text-white text-right">12:30 PM</span>
+
+                        <span class="text-gray-400 font-medium">Reading Time:</span>
+                        <span class="font-bold text-white text-right">12:45 PM – 01:00 PM</span>
+
+                        <span class="text-gray-400 font-medium">Writing Time:</span>
+                        <span class="font-bold text-white text-right">01:00 PM – 02:30 PM</span>
+
+                        <span class="text-gray-400 font-medium">Lunch Interval:</span>
+                        <span class="font-bold text-white text-right">02:30 PM – 03:00 PM</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CUSTOM CONTEXT MENU FOR SUBJECTS AND CHAPTERS -->
+    <div id="custom-context-menu" class="hidden absolute bg-[#1c1c1e] border border-white/10 rounded-xl shadow-2xl py-1.5 z-[100] text-xs w-48 text-gray-200">
+        <!-- Rendered dynamically depending on type -->
+    </div>
+
+    <!-- CUSTOM TITLE EDITING MODAL -->
+    <div id="edit-modal" onclick="handleOutsideModalClick(event, 'edit-modal')" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden transition-opacity duration-150 opacity-0">
+        <div class="charcoal-card rounded-2xl w-full max-w-sm p-5 shadow-2xl space-y-4" onclick="event.stopPropagation()">
+            <div class="space-y-1">
+                <h3 class="text-sm font-bold text-white">Rename Item</h3>
+                <p class="text-xs text-gray-400">Modify the active displayed title label.</p>
+            </div>
+            <div class="space-y-2">
+                <input type="text" id="edit-input-field" class="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-[#0066cc]">
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeEditModal()" class="btn-scale px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-xs font-semibold text-gray-300">
+                    Cancel
+                </button>
+                <button onclick="saveEditValue()" class="btn-scale px-4 py-2 bg-[#0066cc] text-white rounded-full text-xs font-bold">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION DIALOG (Wiping standard alert completely) -->
+    <div id="confirm-modal" onclick="handleOutsideModalClick(event, 'confirm-modal')" class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden transition-opacity duration-150 opacity-0">
+        <div class="charcoal-card rounded-2xl w-full max-w-xs p-5 shadow-2xl space-y-4" onclick="event.stopPropagation()">
+            <div class="space-y-1.5">
+                <h3 class="text-sm font-bold text-white" id="confirm-title">Remove Item?</h3>
+                <p class="text-xs text-gray-400" id="confirm-desc">Are you sure you want to proceed? This change is permanent.</p>
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-1">
+                <button onclick="closeConfirmModal()" class="btn-scale px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-xs font-semibold text-gray-300">
+                    Cancel
+                </button>
+                <button id="confirm-action-btn" class="btn-scale px-4 py-2 bg-[#0066cc] text-white rounded-full text-xs font-bold">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ordered according to recent exam chronology: Science -> Hindi -> Social Science -> AI -> Maths -> English
+        const defaultSyllabusData = [
+            {
+                id: 'science',
+                title: 'Science',
+                date: '24.07.2026',
+                day: 'Friday',
+                icon: 'flask-conical',
+                color: 'text-cyan-400',
+                collapsed: false,
+                chapters: [
+                    { id: 'sci-1', title: 'Acids, Bases and Salts', done: false },
+                    { id: 'sci-2', title: 'Life Processes', done: false },
+                    { id: 'sci-3', title: 'Light: Reflection and Refraction', done: false },
+                    { id: 'sci-4', title: 'Our Environment', done: false }
+                ]
+            },
+            {
+                id: 'hindi',
+                title: 'हिंदी (Hindi)',
+                date: '25.07.2026',
+                day: 'Saturday',
+                icon: 'book-open',
+                color: 'text-rose-400',
+                collapsed: false,
+                chapters: [
+                    { id: 'hin-1', title: '1. सूरदास (Kavya)', done: false },
+                    { id: 'hin-2', title: '2. राम लक्ष्मण परशुराम संवाद', done: false },
+                    { id: 'hin-3', title: '3. आत्मकथ्य', done: false },
+                    { id: 'hin-4', title: '4. नेताजी का चश्मा (Gadya)', done: false },
+                    { id: 'hin-5', title: '5. बालगोबिन भगत', done: false },
+                    { id: 'hin-6', title: '6. लखनवी अंदाज', done: false },
+                    { id: 'hin-7', title: '7. पठित गद्यांश (Seen Prose)', done: false },
+                    { id: 'hin-8', title: '8. पठित पद्यांश (Seen Poetry)', done: false },
+                    { id: 'hin-9', title: '9. वाक्य भेद (Sentence Types)', done: false },
+                    { id: 'hin-10', title: '10. वाच्य (Voices)', done: false },
+                    { id: 'hin-11', title: '11. अपठित गद्यांश (Unseen Prose)', done: false },
+                    { id: 'hin-12', title: '12. अपठित पद्यांश (Unseen Poetry)', done: false },
+                    { id: 'hin-13', title: '13. पत्र लेखन (Letter Writing)', done: false },
+                    { id: 'hin-14', title: '14. अनुच्छेद लेखन (Paragraph Writing)', done: false }
+                ]
+            },
+            {
+                id: 'social',
+                title: 'Social Science',
+                date: '27.07.2026',
+                day: 'Monday',
+                icon: 'globe',
+                color: 'text-emerald-400',
+                collapsed: false,
+                chapters: [
+                    { id: 'soc-1', title: 'Sectors of Indian Economy', done: false },
+                    { id: 'soc-2', title: 'Nationalism in India', done: false },
+                    { id: 'soc-3', title: 'Forest and Wildlife Resource', done: false },
+                    { id: 'soc-4', title: 'Federalism', done: false }
+                ]
+            },
+            {
+                id: 'ai',
+                title: 'Artificial Intelligence',
+                date: '28.07.2026',
+                day: 'Tuesday',
+                icon: 'cpu',
+                color: 'text-indigo-400',
+                collapsed: false,
+                chapters: [
+                    { id: 'ai-1', title: 'Communication Skills', done: false },
+                    { id: 'ai-2', title: 'Self Management Skills', done: false },
+                    { id: 'ai-3', title: 'Project Cycle and Ethics', done: false },
+                    { id: 'ai-4', title: 'Advanced Concepts of Modelling in AI', done: false }
+                ]
+            },
+            {
+                id: 'maths',
+                title: 'Mathematics',
+                date: '29.07.2026',
+                day: 'Wednesday',
+                icon: 'binary',
+                color: 'text-orange-400',
+                collapsed: false,
+                chapters: [
+                    { id: 'math-1', title: 'Real Numbers', done: false },
+                    { id: 'math-2', title: 'Polynomials', done: false },
+                    { id: 'math-3', title: 'Pair of Linear Equations in Two Variables', done: false },
+                    { id: 'math-4', title: 'Quadratic Equations', done: false },
+                    { id: 'math-5', title: 'Arithmetic Progressions', done: false }
+                ]
+            },
+            {
+                id: 'english',
+                title: 'English',
+                date: '30.07.2026',
+                day: 'Thursday',
+                icon: 'languages',
+                color: 'text-purple-400',
+                collapsed: false,
+                chapters: [
+                    { id: 'eng-1', title: 'Unseen Comprehension Passage (Reading)', done: false },
+                    { id: 'eng-2', title: 'Letter to Editor (Writing)', done: false },
+                    { id: 'eng-3', title: 'Letter of Complaint (Writing)', done: false },
+                    { id: 'eng-4', title: 'Tenses (Grammar)', done: false },
+                    { id: 'eng-5', title: 'Nelson Mandela: Long Walk to Freedom', done: false },
+                    { id: 'eng-6', title: 'A Tiger in the Zoo', done: false },
+                    { id: 'eng-7', title: 'Two Stories about Flying', done: false },
+                    { id: 'eng-8', title: 'The Ball Poem', done: false },
+                    { id: 'eng-9', title: 'The Triumph of Surgery', done: false },
+                    { id: 'eng-10', title: 'The Thief\'s Story', done: false }
+                ]
+            }
+        ];
+
+        let syllabusData = [];
+        let editTarget = null; // { type: 'subject'|'chapter', subjectId, chapterId }
+        let confirmAction = null; // Callback for confirm modal
+
+        // Parses date strings in DD.MM.YYYY format to allow robust sorting
+        function parseDateString(dateStr) {
+            const [day, month, year] = dateStr.split('.').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('pt1_companion_syllabus_v3');
+            if (saved) {
+                try {
+                    syllabusData = JSON.parse(saved);
+                    // Match English logic if users update from older, empty version
+                    const eng = syllabusData.find(s => s.id === 'english');
+                    if (eng && (!eng.chapters || eng.chapters.length === 0)) {
+                        eng.chapters = [...defaultSyllabusData.find(s => s.id === 'english').chapters];
+                    }
+                } catch (e) {
+                    syllabusData = [...defaultSyllabusData];
+                }
+            } else {
+                syllabusData = [...defaultSyllabusData];
+            }
+            sortSyllabusByDateSheet();
+        }
+
+        // Dynamically sorts the syllabus data chronologically by date sheet dates
+        function sortSyllabusByDateSheet() {
+            syllabusData.sort((a, b) => parseDateString(a.date) - parseDateString(b.date));
+        }
+
+        function saveData() {
+            sortSyllabusByDateSheet();
+            localStorage.setItem('pt1_companion_syllabus_v3', JSON.stringify(syllabusData));
+            updateMetrics();
+        }
+
+        function renderSyllabus() {
+            const container = document.getElementById('syllabus-container');
+            container.innerHTML = '';
+
+            syllabusData.forEach(sub => {
+                const subCard = document.createElement('div');
+                // Removed padding from parent to avoid leaving space underneath when collapsed
+                subCard.className = 'charcoal-card rounded-2xl overflow-hidden relative transition-all';
+                subCard.id = `sec-${sub.id}`;
+                
+                // Allow custom context menu trigger
+                subCard.addEventListener('contextmenu', (e) => handleRightClick(e, 'subject', sub.id));
+
+                const completedCount = sub.chapters.filter(c => c.done).length;
+                const totalCount = sub.chapters.length;
+
+                // Chevron rotation
+                const chevronRotate = sub.collapsed ? 'transform -rotate-90' : '';
+
+                // Header with its own distinct padding and countdown timer space
+                let headHTML = `
+                    <div class="flex items-center justify-between p-5 cursor-pointer bg-white/[0.01] hover:bg-white/[0.03] transition-colors" onclick="toggleSectionCollapse('${sub.id}', event)">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="${sub.icon}" class="w-4 h-4 ${sub.color}"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <h3 class="text-xs font-bold text-white tracking-tight ${sub.id === 'hindi' ? 'hindi-font' : ''}">${escapeHTML(sub.title)}</h3>
+                                <span class="text-[9px] text-gray-500 font-semibold tracking-wide">${sub.day}, ${sub.date}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <!-- Live ticking countdown badge -->
+                            <div id="countdown-${sub.id}" class="text-[10px] text-right font-mono tracking-tight">
+                                ${getCountdownText(sub.date)}
+                            </div>
+                            ${totalCount > 0 ? `<span class="text-[10px] font-semibold text-gray-400 bg-white/5 px-2 py-0.5 rounded-full">${completedCount}/${totalCount}</span>` : ''}
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 transition-transform duration-200 ${chevronRotate}"></i>
+                        </div>
+                    </div>
+                `;
+
+                // Content chapters list (height & padding fully collapse)
+                let bodyHTML = '';
+                if (totalCount === 0) {
+                    bodyHTML = `
+                        <div class="px-5 pb-5 pt-1">
+                            <div class="text-center text-gray-500 text-xs py-4 border-dashed border border-white/5 rounded-xl">
+                                <p class="font-extrabold uppercase text-[9px] tracking-wider text-gray-400">To be announced / Empty for now</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    bodyHTML = `<div class="px-5 pb-5 pt-1 space-y-2">`;
+                    sub.chapters.forEach(ch => {
+                        const isDone = ch.done;
+                        const labelStyle = isDone ? 'text-gray-500 line-through font-medium' : 'text-gray-200 font-bold';
+                        const hindiClass = sub.id === 'hindi' ? 'hindi-font' : '';
+
+                        // Checkbox has exact check vector icon layered nicely inside circular boundaries
+                        bodyHTML += `
+                            <div class="group flex items-start gap-3 p-2.5 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] transition cursor-pointer" 
+                                 onclick="toggleChapterDone('${sub.id}', '${ch.id}', event)"
+                                 oncontextmenu="handleRightClick(event, 'chapter', '${sub.id}', '${ch.id}')">
+                                <div class="mt-0.5 w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-150 ${isDone ? 'bg-[#0066cc] border border-[#0066cc]' : 'border border-gray-600'}" style="box-shadow: ${isDone ? '0 0 6px rgba(0,102,204,0.4)' : 'none'};">
+                                    ${isDone ? `<i data-lucide="check" class="w-3 h-3 text-white stroke-[3.5] tick-pop"></i>` : ''}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xs ${labelStyle} ${hindiClass} leading-tight">${escapeHTML(ch.title)}</h4>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    bodyHTML += `</div>`;
+                }
+
+                const collapseClass = sub.collapsed ? 'collapsed' : '';
+
+                subCard.innerHTML = `
+                    ${headHTML}
+                    <div class="collapsible-content ${collapseClass}" id="body-${sub.id}">
+                        ${bodyHTML}
+                    </div>
+                `;
+
+                container.appendChild(subCard);
+            });
+
+            lucide.createIcons();
+            updateMetrics();
+        }
+
+        function toggleSectionCollapse(id, event) {
+            if (event) event.stopPropagation();
+            const section = syllabusData.find(s => s.id === id);
+            if (section) {
+                section.collapsed = !section.collapsed;
+                saveData();
+                renderSyllabus();
+            }
+        }
+
+        function toggleChapterDone(subId, chId, event) {
+            if (event) event.stopPropagation();
+            const section = syllabusData.find(s => s.id === subId);
+            if (section) {
+                const chapter = section.chapters.find(c => c.id === chId);
+                if (chapter) {
+                    chapter.done = !chapter.done;
+                    saveData();
+                    renderSyllabus();
+                }
+            }
+        }
+
+        function updateMetrics() {
+            let totalChapters = 0;
+            let completedChapters = 0;
+
+            syllabusData.forEach(sub => {
+                totalChapters += sub.chapters.length;
+                completedChapters += sub.chapters.filter(c => c.done).length;
+            });
+
+            const percent = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
+
+            // Set percents & metrics text
+            const percentLabel = document.getElementById('global-percent');
+            if (percentLabel) percentLabel.textContent = `${percent}%`;
+
+            const subLabel = document.getElementById('total-chapters-sub');
+            if (subLabel) subLabel.textContent = `Completed ${completedChapters} of ${totalChapters} chapters.`;
+
+            // Score-like horizontal tracker fill
+            const barFill = document.getElementById('exo-bar-fill');
+            if (barFill) barFill.style.width = `${percent}%`;
+
+            // Progress Circular indicator dashoffset adjustments
+            const circleRing = document.getElementById('global-ring');
+            if (circleRing) {
+                const radius = circleRing.r.baseVal.value;
+                const circumference = radius * 2 * Math.PI;
+                const offset = circumference - (percent / 100) * circumference;
+                circleRing.style.strokeDasharray = `${circumference} ${circumference}`;
+                circleRing.style.strokeDashoffset = offset;
+            }
+
+            // Status message matching preparation scale
+            const focusMsg = document.getElementById('focus-msg');
+            if (focusMsg) {
+                if (percent === 100) {
+                    focusMsg.textContent = "Spectacular preparation! 🎉";
+                } else if (percent >= 75) {
+                    focusMsg.textContent = "Nearly prepared. Keep going!";
+                } else if (percent >= 45) {
+                    focusMsg.textContent = "Making stable headway!";
+                } else if (focusMsg.textContent !== "Ready to study") {
+                    focusMsg.textContent = "Focus score active.";
+                }
+            }
+        }
+
+        function handleRightClick(e, type, subjectId, chapterId = null) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const menu = document.getElementById('custom-context-menu');
+            menu.style.left = `${e.clientX}px`;
+            menu.style.top = `${e.clientY}px`;
+            menu.classList.remove('hidden');
+
+            // Render matching context menu options
+            if (type === 'subject') {
+                const subject = syllabusData.find(s => s.id === subjectId);
+                const hasIncomplete = subject.chapters.some(c => !c.done);
+                const completeLabel = hasIncomplete ? 'Mark Subject Completed' : 'Mark Subject Incomplete';
+                
+                menu.innerHTML = `
+                    <div class="px-3 py-1.5 border-b border-white/5 text-[9px] font-extrabold uppercase text-[#2997ff] tracking-wider truncate">
+                        ${escapeHTML(subject.title)} Actions
+                    </div>
+                    <button onclick="triggerRenameModal('subject', '${subjectId}')" class="w-full text-left px-3 py-2 hover:bg-white/5 transition flex items-center gap-2">
+                        <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                        <span>Rename Subject</span>
+                    </button>
+                    ${subject.chapters.length > 0 ? `
+                    <button onclick="toggleSubjectCompletion('${subjectId}', ${hasIncomplete})" class="w-full text-left px-3 py-2 hover:bg-white/5 transition flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                        <span>${completeLabel}</span>
+                    </button>
+                    ` : ''}
+                `;
+            } else if (type === 'chapter') {
+                const subject = syllabusData.find(s => s.id === subjectId);
+                const chapter = subject.chapters.find(c => c.id === chapterId);
+                const completeLabel = chapter.done ? 'Mark as Incomplete' : 'Mark as Completed';
+
+                menu.innerHTML = `
+                    <div class="px-3 py-1.5 border-b border-white/5 text-[9px] font-extrabold uppercase text-[#2997ff] tracking-wider truncate">
+                        Chapter Actions
+                    </div>
+                    <button onclick="triggerRenameModal('chapter', '${subjectId}', '${chapterId}')" class="w-full text-left px-3 py-2 hover:bg-white/5 transition flex items-center gap-2">
+                        <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                        <span>Rename Chapter</span>
+                    </button>
+                    <button onclick="toggleChapterDone('${subjectId}', '${chapterId}')" class="w-full text-left px-3 py-2 hover:bg-white/5 transition flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                        <span>${completeLabel}</span>
+                    </button>
+                    <button onclick="triggerDeleteConfirmation('${subjectId}', '${chapterId}')" class="w-full text-left px-3 py-2 hover:bg-red-500/10 text-red-400 transition flex items-center gap-2">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        <span>Delete Chapter</span>
+                    </button>
+                `;
+            }
+
+            lucide.createIcons();
+        }
+
+        // Hide Custom Context Menu globally on left-click outside
+        window.addEventListener('click', () => {
+            const menu = document.getElementById('custom-context-menu');
+            if (menu) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Close custom menus when clicking anywhere outside of it
+        window.addEventListener('contextmenu', (e) => {
+            const menu = document.getElementById('custom-context-menu');
+            // If the right click did not happen inside a subject card or chapter card, close it
+            if (!e.target.closest('.charcoal-card') && !e.target.closest('.group')) {
+                if (menu) menu.classList.add('hidden');
+            }
+        });
+
+        function toggleSubjectCompletion(subjectId, forceDone) {
+            const subject = syllabusData.find(s => s.id === subjectId);
+            if (subject) {
+                subject.chapters.forEach(c => c.done = forceDone);
+                saveData();
+                renderSyllabus();
+            }
+        }
+
+        function triggerDeleteConfirmation(subjectId, chapterId) {
+            const subject = syllabusData.find(s => s.id === subjectId);
+            const chapter = subject.chapters.find(c => c.id === chapterId);
+            
+            if (!chapter) return;
+
+            const modal = document.getElementById('confirm-modal');
+            const title = document.getElementById('confirm-title');
+            const desc = document.getElementById('confirm-desc');
+            const actionBtn = document.getElementById('confirm-action-btn');
+
+            title.textContent = "Delete Chapter?";
+            desc.textContent = `Are you sure you want to delete "${chapter.title}"? This action cannot be undone.`;
+            
+            // Set action action callback
+            confirmAction = () => {
+                subject.chapters = subject.chapters.filter(c => c.id !== chapterId);
+                saveData();
+                renderSyllabus();
+                closeConfirmModal();
+            };
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 150);
+            confirmAction = null;
+        }
+
+        // Setup confirm click handler
+        document.getElementById('confirm-action-btn').addEventListener('click', () => {
+            if (confirmAction) {
+                confirmAction();
+            }
+        });
+
+        /* Rename Apple Dynamic Modals */
+        function triggerRenameModal(type, subjectId, chapterId = null) {
+            editTarget = { type, subjectId, chapterId };
+            const modal = document.getElementById('edit-modal');
+            const input = document.getElementById('edit-input-field');
+
+            let currentVal = '';
+            if (type === 'subject') {
+                currentVal = syllabusData.find(s => s.id === subjectId).title;
+            } else {
+                const sub = syllabusData.find(s => s.id === subjectId);
+                currentVal = sub.chapters.find(c => c.id === chapterId).title;
+            }
+
+            input.value = currentVal;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                input.focus();
+            }, 10);
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('edit-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 150);
+            editTarget = null;
+        }
+
+        function saveEditValue() {
+            if (!editTarget) return;
+            const input = document.getElementById('edit-input-field');
+            const newVal = input.value.trim();
+            if (newVal) {
+                if (editTarget.type === 'subject') {
+                    const subject = syllabusData.find(s => s.id === editTarget.subjectId);
+                    if (subject) subject.title = newVal;
+                } else {
+                    const subject = syllabusData.find(s => s.id === editTarget.subjectId);
+                    if (subject) {
+                        const chapter = subject.chapters.find(c => c.id === editTarget.chapterId);
+                        if (chapter) chapter.title = newVal;
+                    }
+                }
+                saveData();
+                renderSyllabus();
+            }
+            closeEditModal();
+        }
+
+        const examDetails = {
+            science: { title: "Science", date: "July 24, 2026", load: "4 Chapters", day: "Friday" },
+            hindi: { title: "Hindi", date: "July 25, 2026", load: "14 Chapters", day: "Saturday" },
+            social: { title: "Social Sci", date: "July 27, 2026", load: "4 Chapters", day: "Monday" },
+            ai: { title: "AI", date: "July 28, 2026", load: "4 Chapters", day: "Tuesday" },
+            maths: { title: "Maths", date: "July 29, 2026", load: "5 Chapters", day: "Wednesday" },
+            english: { title: "English", date: "July 30, 2026", load: "10 Chapters", day: "Thursday" }
+        };
+
+        function updateTooltip(subjectId) {
+            const details = examDetails[subjectId];
+            if (!details) return;
+
+            document.getElementById('tooltip-status').textContent = details.title;
+            document.getElementById('tooltip-date').textContent = details.date;
+            document.getElementById('tooltip-chapters').textContent = details.load;
+        }
+
+        // Moves the tooltip alongside cursor over relative graph coordinates
+        function positionTooltip(event) {
+            const tooltip = document.getElementById('analytic-tooltip');
+            const relativeBox = document.getElementById('graph-container-relative');
+            if (!tooltip || !relativeBox) return;
+
+            const rect = relativeBox.getBoundingClientRect();
+            const posX = event.clientX - rect.left;
+            const posY = event.clientY - rect.top;
+
+            // Offset tooltip coordinates
+            let leftVal = posX + 15;
+            let topVal = posY - 75;
+
+            // Frame bounds guard
+            if (leftVal + 130 > rect.width) {
+                leftVal = posX - 140; // Flip on overflow
+            }
+
+            tooltip.style.left = `${leftVal}px`;
+            tooltip.style.top = `${topVal}px`;
+            tooltip.style.opacity = '1';
+            tooltip.style.transform = 'scale(1)';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('analytic-tooltip');
+            if (tooltip) {
+                tooltip.style.opacity = '0';
+                tooltip.style.transform = 'scale(0.95)';
+            }
+        }
+
+        function toggleDateSheetModal(show, event) {
+            if (event) event.stopPropagation();
+            const modal = document.getElementById('datesheet-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    // Hide overlay too
+                    const timingsCard = document.getElementById('timings-overlay-card');
+                    if (timingsCard) {
+                        timingsCard.classList.add('hidden');
+                        timingsCard.classList.add('opacity-0');
+                        timingsCard.classList.add('translate-y-4');
+                    }
+                }, 200);
+            }
+        }
+
+        // Toggle timings overlay box within date sheet
+        function toggleTimingsOverlay(event) {
+            if (event) event.stopPropagation();
+            const timingsCard = document.getElementById('timings-overlay-card');
+            if (!timingsCard) return;
+
+            if (timingsCard.classList.contains('hidden')) {
+                timingsCard.classList.remove('hidden');
+                setTimeout(() => {
+                    timingsCard.classList.remove('opacity-0');
+                    timingsCard.classList.remove('translate-y-4');
+                }, 10);
+            } else {
+                timingsCard.classList.add('opacity-0');
+                timingsCard.classList.add('translate-y-4');
+                setTimeout(() => {
+                    timingsCard.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Close custom Apple modals when clicking directly outside the card
+        function handleOutsideModalClick(e, modalId) {
+            if (e.target.id === modalId) {
+                if (modalId === 'datesheet-modal') {
+                    toggleDateSheetModal(false);
+                } else if (modalId === 'edit-modal') {
+                    closeEditModal();
+                } else if (modalId === 'confirm-modal') {
+                    closeConfirmModal();
+                }
+            }
+        }
+
+        // Computes real-time remaining countdown state relative to target Reporting hour (12:30 PM)
+        function getCountdownText(dateStr) {
+            const [day, month, year] = dateStr.split('.').map(Number);
+            // Assuming reporting begins at 12:30 PM on exam day
+            const examDate = new Date(year, month - 1, day, 12, 30, 0);
+            const now = new Date();
+            const diffMs = examDate - now;
+
+            if (diffMs <= 0) {
+                // Determine if writing window or lunch intervals are currently underway (Ends at 3:00 PM)
+                const examEndDate = new Date(year, month - 1, day, 15, 0, 0);
+                if (now < examEndDate) {
+                    return '<span class="text-orange-400 font-bold animate-pulse">Ongoing</span>';
+                }
+                return '<span class="text-gray-500 font-medium">Ended</span>';
+            }
+
+            const diffSecs = Math.floor(diffMs / 1000);
+            const days = Math.floor(diffSecs / (3600 * 24));
+            const hours = Math.floor((diffSecs % (3600 * 24)) / 3600);
+            const mins = Math.floor((diffSecs % 3600) / 60);
+            const secs = diffSecs % 60;
+
+            if (days > 0) {
+                return `<span class="text-[#2997ff] font-bold">${days}d ${hours}h left</span>`;
+            } else if (hours > 0) {
+                return `<span class="text-[#2997ff] font-bold">${hours}h ${mins}m left</span>`;
+            } else {
+                return `<span class="text-red-400 font-black animate-pulse">${mins}m ${secs}s left</span>`;
+            }
+        }
+
+        // Ticks all active DOM countdown wrappers to save rendering frames
+        function updateAllCountdowns() {
+            syllabusData.forEach(sub => {
+                const el = document.getElementById(`countdown-${sub.id}`);
+                if (el) {
+                    el.innerHTML = getCountdownText(sub.date);
+                }
+            });
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        }
+
+        window.onload = function() {
+            loadData();
+            renderSyllabus();
+            // Ticks dynamic dates once every second
+            setInterval(updateAllCountdowns, 1000);
+        }
+    </script>
+</body>
+</html>
     
     <style>
         body {
