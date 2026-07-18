@@ -238,7 +238,7 @@
                                     <div class="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 w-4 h-4 rounded-full bg-[#2997ff] flex items-center justify-center border border-white shadow-lg">
                                         <i data-lucide="check" class="w-2.5 h-2.5 text-white stroke-[3]"></i>
                                     </div>
-                                    <div class="w-full bg-gradient-to-t from-[#0066cc]/40 to-[#2997ff] rounded-t-lg transition-all group-hover:brightness-110 flex items-center justify-center" style="height: 60%;">
+                                    <div class="w-full bg-gradient-to-t from-[#0066cc]/40 to-[#2997ff] rounded-t-lg transition-all group-hover:brightness-110 flex items-center justify-center" style="height: 40%;">
                                         <!-- Vertical Name inside bar -->
                                         <span class="vertical-text absolute bottom-3 text-[9px] font-black tracking-widest text-[#121212] uppercase select-none">Science</span>
                                     </div>
@@ -255,7 +255,7 @@
                             <!-- Social Sci -->
                             <div onmouseenter="updateTooltip('social')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
                                 <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
-                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 60%;">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 40%;">
                                         <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">Social</span>
                                     </div>
                                 </div>
@@ -263,7 +263,7 @@
                             <!-- AI -->
                             <div onmouseenter="updateTooltip('ai')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
                                 <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
-                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 60%;">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 40%;">
                                         <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">AI</span>
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
                             <!-- Maths -->
                             <div onmouseenter="updateTooltip('maths')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
                                 <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
-                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 70%;">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 50%;">
                                         <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">Maths</span>
                                     </div>
                                 </div>
@@ -279,7 +279,7 @@
                             <!-- English -->
                             <div onmouseenter="updateTooltip('english')" onmousemove="positionTooltip(event)" class="flex-1 flex flex-col justify-end h-full relative group">
                                 <div class="w-full bg-[#1c1c1e] border border-white/[0.03] rounded-xl overflow-hidden h-full flex flex-col justify-end relative">
-                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 15%;">
+                                    <div class="w-full bg-white/[0.04] rounded-t-lg transition-all group-hover:bg-white/[0.08] flex items-center justify-center" style="height: 75%;">
                                         <span class="vertical-text absolute bottom-3 text-[9px] font-bold tracking-widest text-gray-400 uppercase select-none">English</span>
                                     </div>
                                 </div>
@@ -330,7 +330,7 @@
     </div>
 
     <!-- CUSTOM CONTEXT MENU FOR SUBJECTS AND CHAPTERS -->
-    <div id="custom-context-menu" class="hidden absolute bg-[#1c1c1e] border border-white/10 rounded-xl shadow-2xl py-1 z-[100] text-xs w-48 text-gray-200">
+    <div id="custom-context-menu" class="hidden absolute bg-[#1c1c1e] border border-white/10 rounded-xl shadow-2xl py-1.5 z-[100] text-xs w-48 text-gray-200">
         <!-- Rendered dynamically depending on type -->
     </div>
 
@@ -467,10 +467,21 @@
                 title: 'English',
                 date: '30.07.2026',
                 day: 'Thursday',
-                icon: 'help-circle',
-                color: 'text-gray-400',
+                icon: 'languages',
+                color: 'text-purple-400',
                 collapsed: false,
-                chapters: [] // Empty English as requested
+                chapters: [
+                    { id: 'eng-1', title: 'Unseen Comprehension Passage (Reading)', done: false },
+                    { id: 'eng-2', title: 'Letter to Editor (Writing)', done: false },
+                    { id: 'eng-3', title: 'Letter of Complaint (Writing)', done: false },
+                    { id: 'eng-4', title: 'Tenses (Grammar)', done: false },
+                    { id: 'eng-5', title: 'Nelson Mandela: Long Walk to Freedom', done: false },
+                    { id: 'eng-6', title: 'A Tiger in the Zoo', done: false },
+                    { id: 'eng-7', title: 'Two Stories about Flying', done: false },
+                    { id: 'eng-8', title: 'The Ball Poem', done: false },
+                    { id: 'eng-9', title: 'The Triumph of Surgery', done: false },
+                    { id: 'eng-10', title: 'The Thief\'s Story', done: false }
+                ]
             }
         ];
 
@@ -478,15 +489,21 @@
         let editTarget = null; // { type: 'subject'|'chapter', subjectId, chapterId }
         let confirmAction = null; // Callback for confirm modal
 
+        // Parses date strings in DD.MM.YYYY format to allow robust sorting
+        function parseDateString(dateStr) {
+            const [day, month, year] = dateStr.split('.').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
         function loadData() {
-            const saved = localStorage.getItem('pt1_companion_syllabus_v2');
+            const saved = localStorage.getItem('pt1_companion_syllabus_v3');
             if (saved) {
                 try {
                     syllabusData = JSON.parse(saved);
-                    // Match English if any structural updates changed it
-                    const englishObj = syllabusData.find(s => s.id === 'english');
-                    if (englishObj && englishObj.chapters.length > 0) {
-                        englishObj.chapters = [];
+                    // Match English logic if users update from older, empty version
+                    const eng = syllabusData.find(s => s.id === 'english');
+                    if (eng && (!eng.chapters || eng.chapters.length === 0)) {
+                        eng.chapters = [...defaultSyllabusData.find(s => s.id === 'english').chapters];
                     }
                 } catch (e) {
                     syllabusData = [...defaultSyllabusData];
@@ -494,10 +511,17 @@
             } else {
                 syllabusData = [...defaultSyllabusData];
             }
+            sortSyllabusByDateSheet();
+        }
+
+        // Dynamically sorts the syllabus data chronologically by date sheet dates
+        function sortSyllabusByDateSheet() {
+            syllabusData.sort((a, b) => parseDateString(a.date) - parseDateString(b.date));
         }
 
         function saveData() {
-            localStorage.setItem('pt1_companion_syllabus_v2', JSON.stringify(syllabusData));
+            sortSyllabusByDateSheet();
+            localStorage.setItem('pt1_companion_syllabus_v3', JSON.stringify(syllabusData));
             updateMetrics();
         }
 
@@ -848,7 +872,7 @@
             social: { title: "Social Sci", date: "July 27, 2026", load: "4 Chapters", day: "Monday" },
             ai: { title: "AI", date: "July 28, 2026", load: "4 Chapters", day: "Tuesday" },
             maths: { title: "Maths", date: "July 29, 2026", load: "5 Chapters", day: "Wednesday" },
-            english: { title: "English", date: "July 30, 2026", load: "TBA / Empty", day: "Thursday" }
+            english: { title: "English", date: "July 30, 2026", load: "10 Chapters", day: "Thursday" }
         };
 
         function updateTooltip(subjectId) {
